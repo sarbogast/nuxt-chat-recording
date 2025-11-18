@@ -1,6 +1,10 @@
 <template>
   <UApp>
-    <NuxtRouteAnnouncer />
-    <UButton>Click me!</UButton>
+    <NuxtRouteAnnouncer/>
+    <NuxtLayout>
+      <NuxtPage/>
+    </NuxtLayout>
   </UApp>
 </template>
+<script setup lang="ts">
+</script>
