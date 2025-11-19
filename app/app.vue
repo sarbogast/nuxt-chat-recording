@@ -1,3 +1,5 @@
+<script  lang="ts" setup="">
+</script>
 <template>
   <UApp>
     <NuxtRouteAnnouncer/>
@@ -6,5 +8,3 @@
     </NuxtLayout>
   </UApp>
 </template>
-<script setup lang="ts">
-</script>
