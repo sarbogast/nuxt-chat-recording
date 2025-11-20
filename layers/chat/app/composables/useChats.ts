@@ -1,5 +1,5 @@
 import type { Chat } from "../types"
-import { MOCK_CHAT } from "~/composables/mockData";
+import { MOCK_CHAT } from "#layers/chat/app/composables/mockData";
 
 export default function useChats() {
     const chats = useState<Chat[]>("chats", () => [MOCK_CHAT])
