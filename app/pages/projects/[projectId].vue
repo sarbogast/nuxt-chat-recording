@@ -33,7 +33,7 @@ async function handleRename() {
 
   isEditing.value = false
   try {
-    await updateProject({ name: editedName.value.trim() })
+    await updateProject({ id: project.value.id, name: editedName.value.trim() })
   } catch (error) {
     console.error('Failed to rename project:', error)
   }

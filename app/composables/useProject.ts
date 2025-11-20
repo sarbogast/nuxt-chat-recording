@@ -12,6 +12,8 @@ export default function useProject(projectId: string) {
         if(!project) return
 
         const index = projects.value.findIndex((p) => p.id === updatedProject.id)
+        console.log('index', index)
+        console.log('updated project', updatedProject)
         if(index < 0) return
 
         projects.value[index] = {

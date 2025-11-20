@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { NavigationMenuItem } from "@nuxt/ui";
-import type { Project, Chat } from "~/types";
+import type { NavigationMenuItem } from '@nuxt/ui'
+import type { Project, Chat } from '../types'
 
 defineProps<{
   isOpen: boolean
@@ -8,54 +8,57 @@ defineProps<{
 
 const route = useRoute()
 const { projects, createProject } = useProjects()
-const { chats, chatsInProject, createChatAndNavigate } = useChats()
+const { chats, chatsInProject, createChatAndNavigate } =
+    useChats()
 
 function isCurrentProject(projectId: string): boolean {
   return route.params.projectId === projectId
 }
-
 const chatsInCurrentProject = computed(() =>
     chatsInProject(route.params.projectId as string)
 )
 
 function formatProjectChat(
     project: Project,
-    chat: Chat,
+    chat: Chat
 ): NavigationMenuItem {
   return {
-    label: chat.title || "Untitled Chat",
+    label: chat.title || 'Untitled Chat',
     to: `/projects/${project.id}/chats/${chat.id}`,
     active: route.params.id === chat.id,
   }
 }
 
-function formatProjectItem(project: Project): NavigationMenuItem {
+function formatProjectItem(
+    project: Project
+): NavigationMenuItem {
   const isCurrent = isCurrentProject(project.id)
-  console.log('current?', isCurrent)
+  console.log('is current?', project.id, isCurrent)
   const baseItem: NavigationMenuItem = {
     label: project.name,
     to: `/projects/${project.id}`,
     active: isCurrent,
     defaultOpen: isCurrent,
   }
-  if(isCurrent) {
+
+  if (isCurrent) {
     return {
       ...baseItem,
-      children: chatsInCurrentProject.value.map(chat =>
+      children: chatsInCurrentProject.value.map((chat) =>
           formatProjectChat(project, chat)
       ),
     }
-  } else {
-    return baseItem
   }
+
+  return baseItem
 }
 
-const projectItems = computed<NavigationMenuItem[]>(() =>
-    projects.value?.map(formatProjectItem)
+const projectItems = computed<NavigationMenuItem[]>(
+    () => projects.value?.map(formatProjectItem) || []
 )
 
 async function handleCreateProject() {
-  const newProject = createProject()
+  const newProject = await createProject()
   await createChatAndNavigate({
     projectId: newProject.id,
   })
@@ -84,7 +87,7 @@ function formatChatItem(chat: Chat): NavigationMenuItem {
   return {
     label: chat.title || 'Untitled Chat',
     to: `/chats/${chat.id}`,
-    active: route.params.id === chat.id
+    active: route.params.id === chat.id,
   }
 }
 
@@ -98,7 +101,10 @@ async function handleCreateChat() {
       class="fixed top-16 left-0 bottom-0 w-64 transition-transform duration-300 z-40 bg-(--ui-bg-muted) border-r-(--ui-border) border-r"
       :class="{ '-translate-x-full': !isOpen }"
   >
-    <div v-if="projectItems.length > 0" class="mb-4 overflow-auto p-4 border-b border-(--ui-border)">
+    <div
+        v-if="projectItems.length > 0"
+        class="mb-4 overflow-auto p-4 border-b border-(--ui-border)"
+    >
       <div class="flex justify-between items-center mb-2">
         <h2
             class="text-sm font-semibold text-(--ui-text-muted)"
@@ -123,7 +129,10 @@ async function handleCreateChat() {
         New Project
       </UButton>
     </div>
-    <div v-if="chatsWithoutProject.length > 0" class="overflow-y-auto p-4">
+    <div
+        v-if="chatsWithoutProject.length > 0"
+        class="overflow-y-auto p-4"
+    >
       <div v-if="todayChats.length > 0" class="mb-4">
         <div class="flex justify-between items-center mb-2">
           <h2
@@ -133,19 +142,18 @@ async function handleCreateChat() {
           </h2>
         </div>
         <UNavigationMenu
-          orientation="vertical"
-          class="w-full mb-4"
-          :items="todayChats"
-          default-open
+            orientation="vertical"
+            class="w-full mb-4"
+            :items="todayChats"
+            default-open
         />
-
       </div>
       <div v-if="lastWeekChats.length > 0" class="mb-4">
         <div class="flex justify-between items-center mb-2">
           <h2
               class="text-sm font-semibold text-(--ui-text-muted)"
           >
-            Last 7 days
+            Last 7 Days
           </h2>
         </div>
         <UNavigationMenu
@@ -160,13 +168,13 @@ async function handleCreateChat() {
           <h2
               class="text-sm font-semibold text-(--ui-text-muted)"
           >
-            Last 30 days
+            Last 30 Days
           </h2>
         </div>
         <UNavigationMenu
             orientation="vertical"
             class="w-full mb-4"
-            :items="lastWeekChats"
+            :items="lastMonthChats"
             default-open
         />
       </div>
@@ -195,12 +203,12 @@ async function handleCreateChat() {
           class="mt-2"
       />
       <UButton
-        size="sm"
-        color="neutral"
-        variant="soft"
-        icon="i-heroicons-plus-small"
-        class="mt-2 w-full"
-        @click="handleCreateChat"
+          size="sm"
+          color="neutral"
+          variant="soft"
+          icon="i-heroicons-plus-small"
+          class="mt-2 w-full"
+          @click="handleCreateChat"
       >
         New Chat
       </UButton>
